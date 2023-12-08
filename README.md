@@ -1,2 +1,2 @@
 # sutdy-backend-board
-study backend for project board
+study backend for board api
