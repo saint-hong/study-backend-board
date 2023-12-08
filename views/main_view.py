@@ -6,7 +6,7 @@ bp = Blueprint('main', __name__, url_prefix = '/')
 @bp.route('/ping', methods = ['GET'])
 def ping() : 
     
-    return 'pong'
+    return 'new pong'
 
 @bp.route('/')
 def index() : 
