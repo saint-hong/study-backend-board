@@ -1,0 +1,137 @@
+<!-- before inheritance base html
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+-->
+<!-- inheritance base html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <!-- flash error modify -->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger" role="alert">
+        {{message}}
+    </div>
+    {% endfor %}
+    <!-- get question content -->
+    <h3 class="my-3 border-bottom pb-2">Q : {{question.subject}}</h3>
+    <div class="card my-3">
+        <div class="card-body">
+            <!--<div class="card-text" style="white-space:pre-line,">{{question.content}}</div>-->
+            <div class="card-text">{{question.content | safe}}</div>
+            <!-- time : modify and create -->
+            <div class="d-flex justify-content-end">
+                {% if question.modify_date %}
+                <div class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div>{{question.modify_date | datetime}}</div>
+                </div>
+                {% endif %}
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">{{question.user.username}}</div>
+                    <div>{{question.create_date | datetime}}</div>
+                </div>
+            </div>
+            <!-- button modify, delete, recommend question detail page -->
+            <div class="my-3">
+                <a href="javascript:void(0)" data-uri="{{url_for('question.vote', question_id=question.id)}}"
+                  class="recommend btn btn-sm btn-outline-secondary">recommend
+                  <span class="badge rounded-pill bg-success">{{question.voter | length}}</span>
+                </a>
+                {% if g.user == question.user %}
+                <a href="{{url_for('question.modify', question_id=question.id)}}" 
+                   class="btn btn-sm btn-outline-secondary">modify</a>
+                <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary" 
+                   data-uri="{{url_for('question.delete', question_id=question.id)}}">delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- input text area -->
+    <h3 class="my-3 border-bottom pb-2">A : Insert your answer.</h3>
+    <form action="{{url_for('answer.create', question_id=question.id)}}" method="post" class="my-3">
+        {{form.csrf_token}}
+        <!-- error sign start -->
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field, errors in form.errors.items() %}
+            <strong>{{form[field].label}}</strong>
+            <ul>
+                {% for error in errors %}
+                <li>{{error}}</li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <!-- error sign end-->
+        <div class="mb-3">
+            <!-- if not login do not insert answer -->
+            <textarea 
+            {% if not g.user %}
+            disabled
+            {% endif %}
+            name="content" id="content" class="form-control" rows="10"></textarea>
+        </div>    
+        <button type="submit" class="btn btn-primary">send</button>
+        <!-- <input type="submit" value="push" class="btn btn-primary"> -->
+    </form>
+    <!-- get answer content -->
+    <h3 class="my-3 border-bottom pb-2">Answer list : {{question.answer_set | length}} answers</h3>
+    <div class="card my-3">
+        <div class="card-body">
+            {% for answer in question.answer_set %}
+            <!-- anchor -->
+            <a id="answer_{{answer.id}}"></a>
+            <!--<div class="card-text" style="white-space:pre-line,">{{answer.content}}</div>-->
+            <div class="card-text">{{answer.content | safe}}</div>
+            <!-- time : modify and create -->    
+            <div class="d-flex justify-content-end">
+                {% if answer.modify_date %}
+                <div class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div>{{answer.modify_date | datetime}}</div>
+                </div>
+                {% endif %}
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">{{answer.user.username}}</div>
+                    <div>{{answer.create_date | datetime}}</div>
+                </div>
+            </div>
+            <!-- modify delete recommend button -->
+            <div class="my-3">
+                <a href="javascript:void(0)" data-uri="{{url_for('answer.vote', answer_id=answer.id)}}"
+                    class="recommend btn btn-sm btn-outline-secondary">recommend
+                <span class="badge rounded-pill bg-success">{{answer.voter | length}}</span>
+                </a>
+                {% if g.user == answer.user %}
+                <a href="{{url_for('answer.modify', answer_id=answer.id)}}"
+                    class="btn btn-sm btn-outline-secondary">modify</a>
+                <a href="#" class="delete btn btn-sm btn-outline-secondary"
+                    data-uri="{{url_for('answer.delete', answer_id=answer.id)}}">delete</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div> 
+</div>
+{% endblock %}
+<!-- java script for delete button : popup new window -->
+{% block script %}
+<script type='text/javascript'>
+const delete_elements = document.getElementsByClassName("delete") ;
+Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("really delete?")) {
+            location.href = this.dataset.uri ;
+        };
+    });
+});
+const recommend_elements = document.getElementsByClassName("recommend") ; 
+Array.from(recommend_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("really recommend?")) {
+            location.href=this.dataset.uri;
+        };
+    });
+});
+</script>
+{% endblock %}

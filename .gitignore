@@ -1,3 +1,9 @@
+# project-board
+pybo.db
+*.pyc
+__pycache__
+migrations
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
