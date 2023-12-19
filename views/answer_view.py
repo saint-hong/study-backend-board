@@ -10,7 +10,7 @@ from datetime import datetime
 
 # markdown and markdown to text
 import markdown
-from markdownfile.html2text import html2text
+# from markdownfile.html2text import html2text
 
 bp = Blueprint('answer', __name__, url_prefix = '/answer')
 
