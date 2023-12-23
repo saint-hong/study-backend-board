@@ -1,14 +1,18 @@
+<!-- sign up page -->
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
     <h5 class="my-3 border-bottom bp-2">sign up</h5>
     <form method="post">
+        <!-- csrf token -->
         {{form.csrf_token}}
+        <!-- form : errors -->
         {% include "form_errors.html" %}
         <div class="mb-3">
             <label for="username">user name</label>
             <input type="text" class="form-control" name="username" id="username" value="{{form.username.data or ''}}">
         </div>
+        <!-- create password -->
         <div class="mb-3">
             <label for="password1">password</label>
             <input type="password" class="form-control" name="password1" id="password1" value="{{form.password1.data or ''}}">

@@ -1,18 +1,13 @@
-<!-- question list with bootstrap -->
-
-<!-- before inheritance base html
-   <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
--->
-
-<!-- inheritance standard base html -->
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">   
-   <!-- search window start -->
+   <!-- insert question and search bar -->
    <div class="row my-3">
+      <!-- insert question -->
       <div class="col-6">
          <a href="{{url_for('question.create')}}" class="btn btn-primary">Insert Question</a>
       </div>
+      <!-- search bar -->
       <div class="col-6">
          <div class="input-group">
             <input type="text" id="search_kw" class="form-control" value="{{ kw or ''}}">
@@ -22,7 +17,7 @@
          </div>
       </div>
    </div>
-   <!-- search window end -->
+   <!-- question list table -->
    <table class="table">
       <thead>
       <tr class="text-center table-dark">
@@ -34,23 +29,25 @@
       </thead>
       <tbody>
       {% if question_list %}
-      <!-- question_list is pagination object parameter from question_view.py and return items-->
       {% for question in question_list.items %}
-      <!-- sort text on center -->
       <tr class="text-center">
+         <!-- question content numbering -->
          <td>{{question_list.total - ((question_list.page - 1) * question_list.per_page) - loop.index0}}</td>
          <td class="text-start">
+            <!-- question content title -->
             <a href="{{url_for('question.detail', question_id=question.id)}}">{{question.subject}}</a>
+            <!-- answer count number badge -->
             {% if question.answer_set | length > 0%}
-            <!-- count number of answer -->
             <span class="text-danger small mx-2">[{{question.answer_set | length}}]</span>
             {% endif %}
          </td>
-         <!-- question form question_list and relationship obj created from models.py -->
+         <!-- question content user name -->
          <td>{{question.user.username}}</td>
+         <!-- question content create date -->
          <td>{{question.create_date | datetime}}</td>
       </tr>
       {% endfor %}
+      <!-- empty question content -->
       {% else %}
       <tr>
          <td colspan="4">not question.</td>
@@ -58,12 +55,11 @@
       {% endif %}
       </tbody>
    </table>
-   <!-- pasing button bar start -->
+   <!-- pasing button bar -->
    <ul class="pagination justify-content-center">
-      <!-- before page -->
+      <!-- button : before -->
       {% if question_list.has_prev %}
       <li class="page-item">
-         <!--<a class="page-link" href="?page={{question_list.prev_num}}">before</a>-->
          <a class="page-link" data-page="{{question_list.prev_num}}" href="javascript:void(0)">before</a>
       </li>
       {% else %}
@@ -71,12 +67,11 @@
          <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">before</a>
       </li>
       {% endif %}
-      <!-- page number -->
+      <!-- button : current page number -->
       {% for page_num in question_list.iter_pages() %}
       {% if page_num %}
       {% if page_num != question_list.page %}
       <li class="page-item">
-         <!--<a class="page-link" href="?page={{page_num}}">{{page_num}}</a>-->
          <a class="page-link" data-page="{{page_num}}" href="javascript:void(0)">{{page_num}}</a>
       </li>
       {% else %}
@@ -84,16 +79,16 @@
          <a class="page-link" href="#">{{page_num}}</a>
       </li>
       {% endif %}
+      <!-- button : more pages -->
       {% else %}
       <li class="disabled">
          <a class="page-link" href="javascript:void(0)">...</a>
       </li>
       {% endif %}
       {% endfor %}
-      <!-- next page -->
+      <!-- button : next -->
       {% if question_list.has_next %}
       <li class="page-item">
-         <!--<a class="page-link" href="?page={{question_list.next_num}}">next</a>-->
          <a class="page-link" data-page="{{question_list.next_num}}" href="javascript:void(0)">next</a>
       </li>
       {% else %}
@@ -102,12 +97,8 @@
       </li>
       {% endif %}
    </ul>
-   <!-- pasing button bar end -->
-   <!-- origin insert question button, changed location = moved top
-   <a href="{{url_for('question.create')}}" class="btn btn-primary">Insert Question</a>
-   -->
-   <!-- search keyword and page form -->
 </div>
+<!-- form : search keyword and page -->
 <form id="searchForm" method="get" action="{{url_for('question.qlist')}}">
    <input type="hidden" id="kw" name="kw" value="{{ kw or '' }}">
    <input type="hidden" id="page" name="page" value="{{ page }}">
@@ -116,18 +107,18 @@
 <!-- search func javascript -->
 {% block script %}
 <script type='text/javascript'>
-const page_elements = document.getElementsByClassName("page-link") ;
-Array.from(page_elements).forEach(function(element) {
-   element.addEventListener('click', function() {
-      document.getElementById('page').value = this.dataset.page ;
-      document.getElementById('searchForm').submit() ;
+   const page_elements = document.getElementsByClassName("page-link") ;
+   Array.from(page_elements).forEach(function(element) {
+      element.addEventListener('click', function() {
+         document.getElementById('page').value = this.dataset.page ;
+         document.getElementById('searchForm').submit() ;
    }) ;
 }) ;
-const btn_search = document.getElementById("btn_search") ;
-btn_search.addEventListener('click', function() {
-      document.getElementById('kw').value = document.getElementById('search_kw').value ;
-      document.getElementById('page').value = 1 ;
-      document.getElementById('searchForm').submit() ; 
+   const btn_search = document.getElementById("btn_search") ;
+   btn_search.addEventListener('click', function() {
+         document.getElementById('kw').value = document.getElementById('search_kw').value ;
+         document.getElementById('page').value = 1 ;
+         document.getElementById('searchForm').submit() ; 
 }) ;
 </script>
 {% endblock%}

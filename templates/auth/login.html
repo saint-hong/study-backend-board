@@ -1,9 +1,12 @@
+<!-- login page -->
 {% extends "base.html"%}
 {% block content %}
 <div class="container">
     <h5 class="my-3 border-bottom pb-2">login</h5>
     <form method="post">
+        <!-- csrf token -->
         {{form.csrf_token}}
+        <!-- form : error -->
         {% include "form_errors.html" %}
         <div class="mb-3">
             <label for="username">username</label>

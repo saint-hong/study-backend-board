@@ -1,4 +1,4 @@
-<!-- question input template-->
+<!-- form : question content / link 'Insert Question' -->
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
@@ -6,26 +6,19 @@
     <form method="post" class="my-3">
         <!-- csrf token create -->
         {{form.csrf_token}}
+        <!-- form : form errors -->
         {% include "form_errors.html"%}
+        <!-- content : title and field -->
         <div class="mb-3">
             <label for="subject">title</label>
             <input type="text" class="form-control" name="subject" id="subject" value="{{form.subject.data or ''}}">
-            <!-- <textarea class="form-control" name="subject" id="subject" rows="10"></textarea> -->
         </div>
+        <!-- content : title and field -->
         <div class="mb-3">
             <label for="content">content</label>
             <textarea class="form-control" name="content" id="content" rows="10">{{form.content.data or ''}}</textarea>
-        
-            <!-- < auto design using forms.py >
-        
-            {{form.subject.label}}
-            {{form.subject(class="form-control")}}  
-
-            {{form.content.label}}
-            {{form.content(class="form-control")}}
-            -->
-        
         </div>
+        <!-- button : send -->
         <button type="submit" class="btn btn-primary">send</button>
     </form>
 </div> 

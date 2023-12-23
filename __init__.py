@@ -1,6 +1,4 @@
-import jump2.config as config
-
-from flask import Flask
+from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
@@ -20,10 +18,15 @@ naming_convention = {
 db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
 
+# error page
+def page_not_found(e) :
+    return render_template('404.html'), 404
+
 def create_app() : 
     
     app = Flask(__name__)
-    app.config.from_object(config)
+    # app.config.from_object(config)
+    app.config.from_envvar('APP_CONFIG_FILE')
     
     # ORM
     ## SQLite error solution : migrate.init_app(app, db, render_as_batch=True)
@@ -48,5 +51,8 @@ def create_app() :
     # markdown
     #Markdown(app, extensions=['nl2br', 'fenced_code'])
     
+    # error page
+    app.register_error_handler(404, page_not_found)
+
     return app
       

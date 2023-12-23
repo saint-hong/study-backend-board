@@ -11,7 +11,7 @@ from datetime import datetime
 
 # markdown, markdown to text
 import markdown
-from markdownfile.html2text import html2text
+# from markdownfile.html2text import html2text
 
 bp = Blueprint('question', __name__, url_prefix='/question')
 
