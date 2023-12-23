@@ -6,28 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- bootstrap CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
-    <!-- answer CSS -->
-    <!--<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">-->
-    <title>eom</title>
+    <title>eom board</title>
 </head>
 <body>
-
-<!-- navbar start -->
+<!-- navbar -->
 {% include "navbar.html" %}
-<!-- navbar end -->
 
-<!-- inheritance start -->
+<!-- inheritance content -->
 {% block content %}
 {% endblock %}
-<!-- inheritance end -->
 
-<!-- bootstrap JS start -->
+<!-- bootstrap JS -->
 <script src="{{url_for('static', filename='bootstrap.min.js')}}" type="text/javascript"></script>
-<!-- bootstrap JS end -->
 
-<!-- javascript start -->
+<!-- inheritance javascript -->
 {% block script %}
 {% endblock %}
-<!-- javascript end -->
 </body>
 </html>    
