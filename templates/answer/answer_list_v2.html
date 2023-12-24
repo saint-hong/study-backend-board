@@ -1,0 +1,90 @@
+<!-- answer list v2 -->
+{% block content %}
+<div class="container my-3">
+    <h3 class="my-3 border-bottom pb-2">Answer list : {{question.answer_set | length}} answers</h3>
+    <table class="table">
+        <thead>
+        <tr class="text-center table-dark">
+            <th>number</th>
+            <th style="width:30%">answer</th>
+            <th style="width:10%">like</th>
+            <th>username</th>
+            <th>date</th>
+            <th>modify date</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% if answer_list %}
+            {% for answer in answer_list.items %}
+            <a id="answer_{{answer.id}}"></a>
+            <tr class="text-center">
+                <!--<td>{{loop.index}}</td>-->
+                <td>{{answer_list.total - ((answer_list.page - 1) * answer_list.per_page) - loop.index0}}</td>
+                <td class="text-center"> 
+                    <a href="{{url_for('answer.modify', answer_id=answer.id)}}">{{answer.content | safe}}</a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" data-uri="{{url_for('answer.vote', answer_id=answer.id)}}"
+                        class="recommend btn btn-sm btn-outline-secondary">like
+                    <span class="badge rounded-pill bg-success">{{answer.voter | length}}</span>
+                    </a>
+                </td>
+                <td>{{answer.user.username}}</td>
+                <td>{{answer.create_date | datetime}}</td>
+                {% if answer.modify_date %}
+                    <td>{{answer.modify_date | datetime}}</td>
+                {% else %}
+                    <td>{{answer.modify_date}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">not answer.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <!--paging button bar-->
+    <ul class="pagination justify-content-center">
+        <!-- butoon : before -->
+        {% if answer_list.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{answer_list.prev_num}}">before</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">before</a>
+        </li>
+        {% endif %}
+        <!-- button : current page number -->
+        {% for page_num in answer_list.iter_pages() %}
+        {% if page_num %}
+        {% if page_num != answer_list.page %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{page_num}}">{{page_num}}</a>
+        </li>
+        {% else %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="javascript:void(0)">{{page_num}}</a>
+        </li>
+        {% endif %}
+        <!-- button : more pages -->
+        {% else %}
+        <li class="disabled">
+            <a class="page-link" href="javascript:void(0)">...</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        <!-- button : next -->
+        {% if answer_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{answer_list.next_num}}">next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">next</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>

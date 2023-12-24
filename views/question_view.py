@@ -11,7 +11,7 @@ from datetime import datetime
 
 # markdown, markdown to text
 import markdown
-# from markdownfile.html2text import html2text
+# from jump2.markdownfile import html2text
 
 bp = Blueprint('question', __name__, url_prefix='/question')
 
@@ -53,10 +53,10 @@ def qlist() :
     question_list = question_list.paginate(page=page, per_page=10)
     return render_template('question/question_list.html', question_list=question_list, page=page, kw=kw)
 
-@bp.route('/detail/<int:question_id>/')
+@bp.route('/detail/<int:question_id>/', methods=['GET', 'POST'])
 def detail(question_id) : 
     
-    form = AnswerForm()
+    answer_form = AnswerForm()
     # 404 error return 
     ## Question.query.get(question_id) ---> Question.query.get_or_404(question_id)
     question = Question.query.get_or_404(question_id)
@@ -68,7 +68,12 @@ def detail(question_id) :
         for i, answer in enumerate(question.answer_set) :
             question.answer_set[i].content = markdown.markdown(answer.content, extentions=[['nl2br', 'fenced_code']])
     
-    return render_template('question/question_detail.html', question=question, form=form)
+    # pagenation for answer_list.html
+    page = request.args.get('page', type=int, default=1)
+    answer_list = Answer.query.order_by(Answer.create_date.desc()).filter(Answer.question_id == question_id)
+    answer_list = answer_list.paginate(page=page, per_page=5)
+    
+    return render_template('question/question_detail.html', question=question, answer_form=answer_form, answer_list=answer_list)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required

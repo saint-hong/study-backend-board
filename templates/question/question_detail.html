@@ -31,7 +31,7 @@
             <div class="my-3">
                 <!-- recommend : open pop up window and count number badge -->
                 <a href="javascript:void(0)" data-uri="{{url_for('question.vote', question_id=question.id)}}"
-                  class="recommend btn btn-sm btn-outline-secondary">recommend
+                  class="recommend btn btn-sm btn-outline-secondary">like
                   <span class="badge rounded-pill bg-success">{{question.voter | length}}</span>
                 </a>
                 {% if g.user == question.user %}
@@ -48,12 +48,12 @@
     <h3 class="my-3 border-bottom pb-2">A : Insert your answer.</h3>
     <form action="{{url_for('answer.create', question_id=question.id)}}" method="post" class="my-3">
         <!-- csrf token -->
-        {{form.csrf_token}}
+        {{answer_form.csrf_token}}
         <!-- form : errors -->
-        {% if form.errors %}
+        {% if answer_form.errors %}
         <div class="alert alert-danger" role="alert">
-            {% for field, errors in form.errors.items() %}
-            <strong>{{form[field].label}}</strong>
+            {% for field, errors in answer_form.errors.items() %}
+            <strong>{{answer_form[field].label}}</strong>
             <ul>
                 {% for error in errors %}
                 <li>{{error}}</li>
@@ -73,45 +73,7 @@
         <button type="submit" class="btn btn-primary">send</button>
     </form>
     <!-- answer list content -->
-    <h3 class="my-3 border-bottom pb-2">Answer list : {{question.answer_set | length}} answers</h3>
-    <div class="card my-3">
-        <div class="card-body">
-            {% for answer in question.answer_set %}
-            <!-- anchor -->
-            <a id="answer_{{answer.id}}"></a>
-            <!-- apply a markdown func -->
-            <div class="card-text">{{answer.content | safe}}</div>
-            <!-- time : modify and create -->    
-            <div class="d-flex justify-content-end">
-                {% if answer.modify_date %}
-                <div class="badge bg-light text-dark p-2 text-start mx-3">
-                    <div class="mb-2">modified at</div>
-                    <div>{{answer.modify_date | datetime}}</div>
-                </div>
-                {% endif %}
-                <div class="badge bg-light text-dark p-2 text-start">
-                    <div class="mb-2">{{answer.user.username}}</div>
-                    <div>{{answer.create_date | datetime}}</div>
-                </div>
-            </div>
-            <!-- button : recommend, modify, delete -->
-            <div class="my-3">
-                <!-- recommend : open pop up window and count number badge -->
-                <a href="javascript:void(0)" data-uri="{{url_for('answer.vote', answer_id=answer.id)}}"
-                    class="recommend btn btn-sm btn-outline-secondary">recommend
-                <span class="badge rounded-pill bg-success">{{answer.voter | length}}</span>
-                </a>
-                {% if g.user == answer.user %}
-                <a href="{{url_for('answer.modify', answer_id=answer.id)}}"
-                    class="btn btn-sm btn-outline-secondary">modify</a>
-                <!-- delete : open pop up window -->    
-                <a href="#" class="delete btn btn-sm btn-outline-secondary"
-                    data-uri="{{url_for('answer.delete', answer_id=answer.id)}}">delete</a>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-    </div> 
+    {% include 'answer/answer_list_v2.html'%}
 </div>
 {% endblock %}
 <!-- javascript func for open pop up window -->

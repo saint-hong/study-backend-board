@@ -36,7 +36,6 @@ def load_logged_in_user() :
 def signup() :
     
     form = UserCreateForm()
-    
     if request.method == 'POST' and form.validate_on_submit() :
         user = User.query.filter_by(username=form.username.data).first()
         if not user :
@@ -53,8 +52,8 @@ def signup() :
 
 @bp.route('/login/', methods=('GET', 'POST'))
 def login() :
-    form = UserLoginForm()
     
+    form = UserLoginForm()
     if request.method == 'POST' and form.validate_on_submit() :
         error = None
         user = User.query.filter_by(username=form.username.data).first()
