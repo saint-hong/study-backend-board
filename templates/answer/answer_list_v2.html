@@ -18,19 +18,24 @@
             {% for answer in answer_list.items %}
             <a id="answer_{{answer.id}}"></a>
             <tr class="text-center">
-                <!--<td>{{loop.index}}</td>-->
+                <!-- answer contents number -->
                 <td>{{answer_list.total - ((answer_list.page - 1) * answer_list.per_page) - loop.index0}}</td>
+                <!-- answer contents -->
                 <td class="text-center"> 
                     <a href="{{url_for('answer.modify', answer_id=answer.id)}}">{{answer.content | safe}}</a>
                 </td>
+                <!-- like -->
                 <td>
                     <a href="javascript:void(0)" data-uri="{{url_for('answer.vote', answer_id=answer.id)}}"
                         class="recommend btn btn-sm btn-outline-secondary">like
                     <span class="badge rounded-pill bg-success">{{answer.voter | length}}</span>
                     </a>
                 </td>
+                <!-- user name -->
                 <td>{{answer.user.username}}</td>
+                <!-- create date -->
                 <td>{{answer.create_date | datetime}}</td>
+                <!-- modify date -->
                 {% if answer.modify_date %}
                     <td>{{answer.modify_date | datetime}}</td>
                 {% else %}
