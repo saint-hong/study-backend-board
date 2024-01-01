@@ -2,10 +2,12 @@ from flask import Blueprint, render_template, request, url_for, g, flash
 from werkzeug.utils import redirect
 
 from jump2 import db
-from jump2.models import Question, Answer, User
+from jump2.models import Question, Answer, User, answer_voter as av
 # QuestionForm class in forms.py
 from jump2.forms import QuestionForm, AnswerForm
 from jump2.views.auth_view import login_required
+
+from sqlalchemy import func
 
 from datetime import datetime
 
@@ -61,6 +63,7 @@ def detail(question_id) :
     ## Question.query.get(question_id) ---> Question.query.get_or_404(question_id)
     question = Question.query.get_or_404(question_id)
     
+    
     # markdown question content
     question.content = markdown.markdown(question.content, extentions=['nl2br', 'fenced_code'])
     # markdown answer content
@@ -70,8 +73,14 @@ def detail(question_id) :
     
     # pagenation for answer_list.html
     page = request.args.get('page', type=int, default=1)
-    answer_list = Answer.query.order_by(Answer.create_date.desc()).filter(Answer.question_id == question_id)
+    # sort by count answer_voter, av : answer_voter table
+    sub_query = db.session.query(av.c.answer_id, func.count(av.c.user_id).label('count')) \
+                          .group_by(av.c.answer_id).subquery()
+    answer_list = Answer.query.filter(Answer.question_id == question_id)
+    answer_list = answer_list.outerjoin(sub_query, sub_query.c.answer_id == Answer.id).order_by(sub_query.c.count.desc())
     answer_list = answer_list.paginate(page=page, per_page=5)
+    
+    # answer_list = Answer.query.order_by(Answer.create_date.desc()).filter(Answer.question_id == question_id)
     
     return render_template('question/question_detail.html', question=question, answer_form=answer_form, answer_list=answer_list)
 
