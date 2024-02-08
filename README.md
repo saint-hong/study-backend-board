@@ -127,7 +127,7 @@
 <img src="./images/board_q_detail.png">
 
 ### Question Modify page
-<img src="./images/board_question_modify.png">
+<img src="./images/board_question_moidfy.png">
 
 ### Answer List page
 <img src="./images/board_q_detail_answer_list.png">
