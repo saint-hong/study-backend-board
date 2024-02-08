@@ -135,3 +135,9 @@
 ### Answer Modify page
 <img src="./images/board_answer_modify.png">
 
+## branch
+- branch 별로 새로운 기능을 추가하고 해당 기능에 대한 설명
+
+### board_x_1
+- 질문에 대한 답변의 갯수가 늘어날 경우 페이징 기능이 추가된 답변 리스트로 업그레이드 함
+- 답변에 좋아요가 추가되면 좋아요 갯수가 많은 순서데로 답변 리스트를 정렬하도록 업그레이드 함
