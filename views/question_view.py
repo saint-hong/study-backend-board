@@ -73,7 +73,7 @@ def detail(question_id) :
     
     # pagenation for answer_list.html
     page = request.args.get('page', type=int, default=1)
-    # sort by count answer_voter, av : answer_voter table
+    # sort by count answer_voter, av : import answer_voter table
     sub_query = db.session.query(av.c.answer_id, func.count(av.c.user_id).label('count')) \
                           .group_by(av.c.answer_id).subquery()
     answer_list = Answer.query.filter(Answer.question_id == question_id)
