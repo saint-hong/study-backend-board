@@ -78,7 +78,7 @@ def detail(question_id) :
                           .group_by(av.c.answer_id).subquery()
     answer_list = Answer.query.filter(Answer.question_id == question_id)
     answer_list = answer_list.outerjoin(sub_query, sub_query.c.answer_id == Answer.id).order_by(sub_query.c.count.desc())
-    answer_list = answer_list.paginate(page=page, per_page=5)
+    answer_list = answer_list.paginate(page=page, per_page=3)
     
     # answer_list = Answer.query.order_by(Answer.create_date.desc()).filter(Answer.question_id == question_id)
     
