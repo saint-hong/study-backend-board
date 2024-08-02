@@ -22,6 +22,8 @@
 - froms.py : Flask의 Form 라이브러리를 사용하여 유저가 입력하는 값을 효율적으로 관리하는 파일
 - filter.py : 게시판의 컨텐츠를 생성하거나 수정한 시각을 표준화하기 위한 필터 함수 파일
 
+<img src="./images/source_code_tree.png">
+
 ## 소스코드 설명
 
 ### 1) __init__.py
