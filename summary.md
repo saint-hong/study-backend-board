@@ -58,7 +58,7 @@
    - url_prefix='/' : URL의 기본 접두어, 이것을 /main이라고 설정하면, 모든 URL의 시작점이 /main이 된다.
       - /main/ping
 
-"""
+```
 [main_views.py]
 
 from flask import Blueprint
@@ -83,7 +83,7 @@ def create_app() :
    app.register_blueprint(main_views.bp)
    
    return app   
-"""
+```
 
 ## 3. ORM 사용하여 SQLite에 데이터 생성하기 (object relational mapping)
 - 파이썬에서 쿼리를 사용하지 않고 파이썬 문법으로 데이터 베이스를 실행시킬 수 있도록 해준다.
